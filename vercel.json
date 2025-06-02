@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "env": {
+    "MONGODB_URI": "@mongodb_uri",
+    "DB_NAME": "@db_name",
+    "NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY": "@next_public_paystack_public_key"
+  }
+} 
