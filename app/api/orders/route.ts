@@ -4,11 +4,16 @@ import { orderQueries, customerQueries } from "@/lib/database"
 // GET all orders
 export async function GET() {
   try {
-    const orders = orderQueries.getAll()
+    console.log("Fetching all orders...")
+    const orders = await orderQueries.getAll()
+    console.log(`Found ${orders.length} orders`)
     return NextResponse.json(orders)
   } catch (error) {
     console.error("Error fetching orders:", error)
-    return NextResponse.json({ message: "Internal server error" }, { status: 500 })
+    return NextResponse.json(
+      { message: "Failed to fetch orders. Please check database connection." },
+      { status: 500 }
+    )
   }
 }
 
@@ -16,18 +21,21 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
+    console.log("Received order data:", body)
     const { customerInfo, items, subtotal, shipping, total, paymentMethod } = body
 
     // Validate required fields
     if (!customerInfo || !items || !total) {
+      console.error("Missing required fields:", { customerInfo, items, total })
       return NextResponse.json({ message: "Missing required fields" }, { status: 400 })
     }
 
     // Generate order ID
     const orderId = Date.now().toString()
+    console.log("Generated order ID:", orderId)
 
     // Create order
-    orderQueries.create({
+    const orderData = {
       id: orderId,
       customer_info: customerInfo,
       items: items,
@@ -36,14 +44,21 @@ export async function POST(request: NextRequest) {
       total,
       payment_method: paymentMethod,
       status: "pending",
-    })
+      created_at: new Date(),
+      updated_at: new Date(),
+    }
+    console.log("Creating order with data:", orderData)
+
+    const result = await orderQueries.create(orderData)
+    console.log("Order created successfully:", result)
 
     // Save/update customer info
     try {
-      const existingCustomer = customerQueries.getByEmail(customerInfo.email)
+      const existingCustomer = await customerQueries.getByEmail(customerInfo.email)
+      console.log("Existing customer check:", existingCustomer ? "Found" : "Not found")
 
       if (existingCustomer) {
-        customerQueries.update(customerInfo.email, {
+        await customerQueries.update(customerInfo.email, {
           first_name: customerInfo.firstName,
           last_name: customerInfo.lastName,
           phone: customerInfo.phone || "",
@@ -52,8 +67,9 @@ export async function POST(request: NextRequest) {
           state: customerInfo.state || "",
           email_updates: customerInfo.emailUpdates || false,
         })
+        console.log("Customer info updated")
       } else {
-        customerQueries.create({
+        await customerQueries.create({
           first_name: customerInfo.firstName,
           last_name: customerInfo.lastName,
           email: customerInfo.email,
@@ -63,6 +79,7 @@ export async function POST(request: NextRequest) {
           state: customerInfo.state || "",
           email_updates: customerInfo.emailUpdates || false,
         })
+        console.log("New customer created")
       }
     } catch (customerError) {
       console.error("Error saving customer:", customerError)
@@ -78,6 +95,9 @@ export async function POST(request: NextRequest) {
     )
   } catch (error) {
     console.error("Error creating order:", error)
-    return NextResponse.json({ message: "Internal server error" }, { status: 500 })
+    return NextResponse.json(
+      { message: "Failed to create order. Please check database connection." },
+      { status: 500 }
+    )
   }
 }

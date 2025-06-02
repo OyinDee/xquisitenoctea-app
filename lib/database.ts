@@ -12,6 +12,10 @@ async function connectToDatabase() {
   if (!client || !db) {
     console.log("Connecting to MongoDB...")
     try {
+      if (!MONGODB_URI) {
+        throw new Error("MONGODB_URI is not defined in environment variables")
+      }
+
       client = new MongoClient(MONGODB_URI)
       await client.connect()
       db = client.db(DB_NAME)
@@ -20,9 +24,9 @@ async function connectToDatabase() {
       // Verify connection
       await db.command({ ping: 1 })
       console.log("Database connection verified")
-    } catch (error) {
+    } catch (error: any) {
       console.error("MongoDB connection error:", error)
-      throw error
+      throw new Error(`Failed to connect to MongoDB: ${error.message}`)
     }
   }
   return { client, db }
@@ -163,42 +167,90 @@ export const productQueries = {
 // Order operations
 export const orderQueries = {
   async getAll() {
-    const { db } = await connectToDatabase()
-    return await db.collection("orders").find({}).sort({ created_at: -1 }).toArray()
+    try {
+      const { db } = await connectToDatabase()
+      if (!db) throw new Error("Database connection failed")
+      
+      console.log("Fetching all orders from database...")
+      const orders = await db.collection("orders").find({}).sort({ created_at: -1 }).toArray()
+      console.log(`Found ${orders.length} orders`)
+      return orders
+    } catch (error) {
+      console.error("Error in getAll orders:", error)
+      throw error
+    }
   },
 
   async getById(id: string) {
-    const { db } = await connectToDatabase()
-    return await db.collection("orders").findOne({ id })
+    try {
+      const { db } = await connectToDatabase()
+      if (!db) throw new Error("Database connection failed")
+      
+      console.log(`Fetching order with ID: ${id}`)
+      const order = await db.collection("orders").findOne({ id })
+      console.log("Order found:", order ? "Yes" : "No")
+      return order
+    } catch (error) {
+      console.error("Error in getById order:", error)
+      throw error
+    }
   },
 
   async create(orderData: any) {
-    const { db } = await connectToDatabase()
-    const result = await db.collection("orders").insertOne({
-      ...orderData,
-      created_at: new Date(),
-      updated_at: new Date(),
-    })
-    return result.insertedId
+    try {
+      const { db } = await connectToDatabase()
+      if (!db) throw new Error("Database connection failed")
+      
+      console.log("Creating new order:", orderData)
+      const result = await db.collection("orders").insertOne({
+        ...orderData,
+        created_at: new Date(),
+        updated_at: new Date(),
+      })
+      console.log("Order created successfully:", result.insertedId)
+      return result.insertedId
+    } catch (error) {
+      console.error("Error in create order:", error)
+      throw error
+    }
   },
 
   async updateStatus(id: string, status: string) {
-    const { db } = await connectToDatabase()
-    const result = await db.collection("orders").updateOne(
-      { id },
-      {
-        $set: {
-          status,
-          updated_at: new Date(),
+    try {
+      const { db } = await connectToDatabase()
+      if (!db) throw new Error("Database connection failed")
+      
+      console.log(`Updating order ${id} status to: ${status}`)
+      const result = await db.collection("orders").updateOne(
+        { id },
+        {
+          $set: {
+            status,
+            updated_at: new Date(),
+          },
         },
-      },
-    )
-    return result.modifiedCount > 0
+      )
+      console.log("Status update result:", result.modifiedCount > 0 ? "Success" : "Failed")
+      return result.modifiedCount > 0
+    } catch (error) {
+      console.error("Error in updateStatus order:", error)
+      throw error
+    }
   },
 
   async getByStatus(status: string) {
-    const { db } = await connectToDatabase()
-    return await db.collection("orders").find({ status }).sort({ created_at: -1 }).toArray()
+    try {
+      const { db } = await connectToDatabase()
+      if (!db) throw new Error("Database connection failed")
+      
+      console.log(`Fetching orders with status: ${status}`)
+      const orders = await db.collection("orders").find({ status }).sort({ created_at: -1 }).toArray()
+      console.log(`Found ${orders.length} orders with status ${status}`)
+      return orders
+    } catch (error) {
+      console.error("Error in getByStatus orders:", error)
+      throw error
+    }
   },
 }
 
