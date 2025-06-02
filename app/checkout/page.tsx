@@ -327,24 +327,44 @@ export default function CheckoutPage() {
                           <SelectValue placeholder="Select state" />
                         </SelectTrigger>
                         <SelectContent className="bg-gray-900 border-gray-700">
-                          <SelectItem value="lagos" className="text-white hover:bg-gray-800">
-                            Lagos
-                          </SelectItem>
-                          <SelectItem value="abuja" className="text-white hover:bg-gray-800">
-                            Abuja
-                          </SelectItem>
-                          <SelectItem value="kano" className="text-white hover:bg-gray-800">
-                            Kano
-                          </SelectItem>
-                          <SelectItem value="port-harcourt" className="text-white hover:bg-gray-800">
-                            Port Harcourt
-                          </SelectItem>
-                          <SelectItem value="ibadan" className="text-white hover:bg-gray-800">
-                            Ibadan
-                          </SelectItem>
-                          <SelectItem value="other" className="text-white hover:bg-gray-800">
-                            Other
-                          </SelectItem>
+                          <SelectItem value="abia" className="text-white hover:bg-gray-800">Abia</SelectItem>
+                          <SelectItem value="adamawa" className="text-white hover:bg-gray-800">Adamawa</SelectItem>
+                          <SelectItem value="akwa-ibom" className="text-white hover:bg-gray-800">Akwa Ibom</SelectItem>
+                          <SelectItem value="anambra" className="text-white hover:bg-gray-800">Anambra</SelectItem>
+                          <SelectItem value="bauchi" className="text-white hover:bg-gray-800">Bauchi</SelectItem>
+                          <SelectItem value="bayelsa" className="text-white hover:bg-gray-800">Bayelsa</SelectItem>
+                          <SelectItem value="benue" className="text-white hover:bg-gray-800">Benue</SelectItem>
+                          <SelectItem value="borno" className="text-white hover:bg-gray-800">Borno</SelectItem>
+                          <SelectItem value="cross-river" className="text-white hover:bg-gray-800">Cross River</SelectItem>
+                          <SelectItem value="delta" className="text-white hover:bg-gray-800">Delta</SelectItem>
+                          <SelectItem value="ebonyi" className="text-white hover:bg-gray-800">Ebonyi</SelectItem>
+                          <SelectItem value="edo" className="text-white hover:bg-gray-800">Edo</SelectItem>
+                          <SelectItem value="ekiti" className="text-white hover:bg-gray-800">Ekiti</SelectItem>
+                          <SelectItem value="enugu" className="text-white hover:bg-gray-800">Enugu</SelectItem>
+                          <SelectItem value="abuja" className="text-white hover:bg-gray-800">Federal Capital Territory</SelectItem>
+                          <SelectItem value="abia" className="text-white hover:bg-gray-800">Abia</SelectItem>
+                          <SelectItem value="gombe" className="text-white hover:bg-gray-800">Gombe</SelectItem>
+                          <SelectItem value="imo" className="text-white hover:bg-gray-800">Imo</SelectItem>
+                          <SelectItem value="jigawa" className="text-white hover:bg-gray-800">Jigawa</SelectItem>
+                          <SelectItem value="kaduna" className="text-white hover:bg-gray-800">Kaduna</SelectItem>
+                          <SelectItem value="kano" className="text-white hover:bg-gray-800">Kano</SelectItem>
+                          <SelectItem value="katsina" className="text-white hover:bg-gray-800">Katsina</SelectItem>
+                          <SelectItem value="kebbi" className="text-white hover:bg-gray-800">Kebbi</SelectItem>
+                          <SelectItem value="kogi" className="text-white hover:bg-gray-800">Kogi</SelectItem>
+                          <SelectItem value="kwara" className="text-white hover:bg-gray-800">Kwara</SelectItem>
+                          <SelectItem value="lagos" className="text-white hover:bg-gray-800">Lagos</SelectItem>
+                          <SelectItem value="nasarawa" className="text-white hover:bg-gray-800">Nasarawa</SelectItem>
+                          <SelectItem value="niger" className="text-white hover:bg-gray-800">Niger</SelectItem>
+                          <SelectItem value="ogun" className="text-white hover:bg-gray-800">Ogun</SelectItem>
+                          <SelectItem value="ondo" className="text-white hover:bg-gray-800">Ondo</SelectItem>
+                          <SelectItem value="osun" className="text-white hover:bg-gray-800">Osun</SelectItem>
+                          <SelectItem value="oyo" className="text-white hover:bg-gray-800">Oyo</SelectItem>
+                          <SelectItem value="plateau" className="text-white hover:bg-gray-800">Plateau</SelectItem>
+                          <SelectItem value="rivers" className="text-white hover:bg-gray-800">Rivers</SelectItem>
+                          <SelectItem value="sokoto" className="text-white hover:bg-gray-800">Sokoto</SelectItem>
+                          <SelectItem value="taraba" className="text-white hover:bg-gray-800">Taraba</SelectItem>
+                          <SelectItem value="yobe" className="text-white hover:bg-gray-800">Yobe</SelectItem>
+                          <SelectItem value="zamfara" className="text-white hover:bg-gray-800">Zamfara</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
