@@ -187,7 +187,8 @@ export const orderQueries = {
       if (!db) throw new Error("Database connection failed")
       
       console.log(`Fetching order with ID: ${id}`)
-      const order = await db.collection("orders").findOne({ id })
+      const { ObjectId } = require("mongodb")
+      const order = await db.collection("orders").findOne({ _id: new ObjectId(id) })
       console.log("Order found:", order ? "Yes" : "No")
       return order
     } catch (error) {
@@ -221,8 +222,9 @@ export const orderQueries = {
       if (!db) throw new Error("Database connection failed")
       
       console.log(`Updating order ${id} status to: ${status}`)
+      const { ObjectId } = require("mongodb")
       const result = await db.collection("orders").updateOne(
-        { id },
+        { _id: new ObjectId(id) },
         {
           $set: {
             status,
@@ -252,6 +254,22 @@ export const orderQueries = {
       throw error
     }
   },
+
+  async delete(id: string) {
+    try {
+      const { db } = await connectToDatabase()
+      if (!db) throw new Error("Database connection failed")
+      
+      console.log(`Deleting order with ID: ${id}`)
+      const { ObjectId } = require("mongodb")
+      const result = await db.collection("orders").deleteOne({ _id: new ObjectId(id) })
+      console.log("Delete result:", result.deletedCount > 0 ? "Success" : "Failed")
+      return result.deletedCount > 0
+    } catch (error) {
+      console.error("Error in delete order:", error)
+      throw error
+    }
+  }
 }
 
 // Customer operations

@@ -1,44 +1,81 @@
-import { type NextRequest, NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { orderQueries } from "@/lib/database"
 
-// GET single order
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
-    const order = orderQueries.getById(params.id)
-
+    const { id } = await params
+    const order = await orderQueries.getById(id)
     if (!order) {
-      return NextResponse.json({ message: "Order not found" }, { status: 404 })
+      return NextResponse.json(
+        { error: "Order not found" },
+        { status: 404 }
+      )
     }
-
     return NextResponse.json(order)
   } catch (error) {
     console.error("Error fetching order:", error)
-    return NextResponse.json({ message: "Internal server error" }, { status: 500 })
+    return NextResponse.json(
+      { error: "Failed to fetch order" },
+      { status: 500 }
+    )
   }
 }
 
-// UPDATE order status
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
-    const body = await request.json()
-    const { status } = body
-
-    if (!status) {
-      return NextResponse.json({ message: "Status is required" }, { status: 400 })
+    const { id } = await params
+    const { status } = await request.json()
+    const success = await orderQueries.updateStatus(id, status)
+    
+    if (!success) {
+      return NextResponse.json(
+        { error: "Order not found" },
+        { status: 404 }
+      )
     }
-
-    // Check if order exists
-    const existingOrder = orderQueries.getById(params.id)
-    if (!existingOrder) {
-      return NextResponse.json({ message: "Order not found" }, { status: 404 })
-    }
-
-    // Update order status
-    orderQueries.updateStatus(params.id, status)
-
-    return NextResponse.json({ message: "Order status updated successfully" })
+    
+    return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("Error updating order status:", error)
-    return NextResponse.json({ message: "Internal server error" }, { status: 500 })
+    console.error("Error updating order:", error)
+    return NextResponse.json(
+      { error: "Failed to update order" },
+      { status: 500 }
+    )
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params
+    const success = await orderQueries.delete(id)
+    
+    if (!success) {
+      return NextResponse.json(
+        { error: "Order not found" },
+        { status: 404 }
+      )
+    }
+    
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    console.error("Error deleting order:", error)
+    return NextResponse.json(
+      { error: "Failed to delete order" },
+      { status: 500 }
+    )
+  }
+}
+
+
+
+
+

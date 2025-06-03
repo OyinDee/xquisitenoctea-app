@@ -18,14 +18,14 @@ interface ProductFormProps {
   initialData?: {
     name: string
     description: string
-    long_description: string
+    long_description?: string
     price: number
     category: string
-    notes: string
+    notes: string[]
     stock: number
     images: string[]
     size_options: SizeOption[]
-    ingredients: string[]
+    ingredients?: string[]
   }
   onSubmit: (data: any) => void
   isSubmitting: boolean
@@ -38,7 +38,7 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
     long_description: initialData?.long_description || "",
     price: initialData?.price || 0,
     category: initialData?.category || "",
-    notes: initialData?.notes || "",
+    notes: Array.isArray(initialData?.notes) ? initialData.notes.join(", ") : "",
     stock: initialData?.stock || 0,
     images: initialData?.images || [""],
     size_options: initialData?.size_options || [
@@ -249,7 +249,6 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
                 <ImageUpload
                   value={image}
                   onChange={(value) => handleImageChange(index, value)}
-                  onRemove={() => removeImageField(index)}
                 />
               </div>
             </div>

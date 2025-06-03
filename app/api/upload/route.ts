@@ -1,5 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { uploadImage } from "@/lib/cloudinary"
+import { v2 as cloudinary } from "cloudinary"
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+})
 
 export async function POST(request: NextRequest) {
   try {
@@ -30,31 +37,36 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "File size must be less than 5MB" }, { status: 400 })
     }
 
+    // Convert File to base64
+    const bytes = await file.arrayBuffer()
+    const buffer = Buffer.from(bytes)
+    const base64String = buffer.toString("base64")
+    const dataURI = `data:${file.type};base64,${base64String}`
+
     // Upload to Cloudinary
-    try {
-      console.log("Attempting to upload to Cloudinary...")
-      const imageUrl = await uploadImage(file)
-      console.log("Upload successful:", imageUrl)
-      return NextResponse.json({ url: imageUrl })
-    } catch (uploadError) {
-      console.error("Cloudinary upload error:", {
-        message: uploadError.message,
-        stack: uploadError.stack,
-        details: uploadError
-      })
-      return NextResponse.json(
-        { error: "Failed to upload image to Cloudinary", details: uploadError.message },
-        { status: 500 }
+    const result = await new Promise((resolve, reject) => {
+      cloudinary.uploader.upload(
+        dataURI,
+        {
+          folder: "xquisitenoctea",
+          resource_type: "auto",
+        },
+        (error, result) => {
+          if (error) reject(error)
+          else resolve(result)
+        }
       )
-    }
+    })
+
+    return NextResponse.json(result)
   } catch (error) {
     console.error("Upload route error:", {
-      message: error.message,
-      stack: error.stack,
+      message: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
       details: error
     })
     return NextResponse.json(
-      { error: "Upload failed", details: error.message },
+      { error: "Upload failed", details: error instanceof Error ? error.message : "Unknown error" },
       { status: 500 }
     )
   }

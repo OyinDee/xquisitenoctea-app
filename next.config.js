@@ -13,8 +13,10 @@ const nextConfig = {
     ],
   },
   experimental: {
-    serverActions: true,
+    serverActions: {
+      bodySizeLimit: '2mb'
+    },
   },
 }
 
-module.exports = nextConfig 
+module.exports = nextConfig

@@ -1,31 +1,37 @@
-import { type NextRequest, NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { productQueries } from "@/lib/database"
 
 // GET single product
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
-    const product = await productQueries.getById(params.id)
-
+    const { id } = await params
+    const product = await productQueries.getById(id)
     if (!product) {
-      return NextResponse.json({ message: "Product not found" }, { status: 404 })
+      return NextResponse.json(
+        { error: "Product not found" },
+        { status: 404 }
+      )
     }
-
-    // Convert MongoDB _id to id for frontend compatibility
-    const formattedProduct = {
-      ...product,
-      id: product._id.toString(),
-    }
-
-    return NextResponse.json(formattedProduct)
+    return NextResponse.json(product)
   } catch (error) {
     console.error("Error fetching product:", error)
-    return NextResponse.json({ message: "Internal server error" }, { status: 500 })
+    return NextResponse.json(
+      { error: "Failed to fetch product" },
+      { status: 500 }
+    )
   }
 }
 
 // UPDATE product
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id } = await params
     const body = await request.json()
     const { 
       name, 
@@ -46,7 +52,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     }
 
     // Update product
-    const success = await productQueries.update(params.id, {
+    const success = await productQueries.update(id, {
       name,
       description,
       long_description: long_description || "",
@@ -71,17 +77,27 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 }
 
 // DELETE product
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
-    const success = await productQueries.delete(params.id)
-
-    if (success) {
-      return NextResponse.json({ message: "Product deleted successfully" })
-    } else {
-      return NextResponse.json({ message: "Product not found" }, { status: 404 })
+    const { id } = await params
+    const success = await productQueries.delete(id)
+    
+    if (!success) {
+      return NextResponse.json(
+        { error: "Product not found" },
+        { status: 404 }
+      )
     }
+    
+    return NextResponse.json({ success: true })
   } catch (error) {
     console.error("Error deleting product:", error)
-    return NextResponse.json({ message: "Internal server error" }, { status: 500 })
+    return NextResponse.json(
+      { error: "Failed to delete product" },
+      { status: 500 }
+    )
   }
 }
