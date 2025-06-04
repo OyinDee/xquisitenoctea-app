@@ -64,12 +64,16 @@ export default function ImageUpload({ value, onChange, disabled }: ImageUploadPr
 
       const data = await response.json()
       onChange(data.url)
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Upload error:", error)
-      if (error.name === "AbortError") {
-        setUploadError("Upload timed out. Please try again.")
+      if (error instanceof Error) {
+        if (error.name === "AbortError") {
+          setUploadError("Upload timed out. Please try again.")
+        } else {
+          setUploadError(error.message || "Failed to upload image. Please try again.")
+        }
       } else {
-        setUploadError(error.message || "Failed to upload image. Please try again.")
+        setUploadError("Failed to upload image. Please try again.")
       }
     } finally {
       setIsUploading(false)

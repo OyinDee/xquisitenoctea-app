@@ -60,15 +60,19 @@ export async function uploadImage(file: File): Promise<string> {
       )
     ])
 
-    console.log("Cloudinary upload successful:", result.secure_url)
-    return result.secure_url
-  } catch (error) {
+    if (result && typeof result === 'object' && 'secure_url' in result) {
+      console.log("Cloudinary upload successful:", result.secure_url)
+      return result.secure_url as string
+    } else {
+      throw new Error('Invalid response from Cloudinary')
+    }
+  } catch (error: unknown) {
     console.error('Cloudinary upload error:', {
-      message: error.message,
-      stack: error.stack,
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
       details: error
     })
-    throw new Error(error.message || 'Failed to upload image')
+    throw new Error(error instanceof Error ? error.message : 'Failed to upload image')
   }
 }
 
@@ -79,7 +83,7 @@ export async function deleteImage(imageUrl: string): Promise<boolean> {
     const publicId = imageUrl.split("/").slice(-2).join("/").split(".")[0]
     const result = await cloudinary.uploader.destroy(`xquisitenoctea/products/${publicId}`)
     return result.result === "ok"
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error deleting image:", error)
     return false
   }
