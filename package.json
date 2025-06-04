@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "prebuild": "node -e \"require('fs').cpSync('./public', './.next/static/', {recursive: true})\"",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "next telemetry disable"
