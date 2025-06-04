@@ -92,7 +92,7 @@ export default function ShopPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black pt-24">
+    <div className="min-h-screen bg-black pt-24 pb-24">
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-12">
