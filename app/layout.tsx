@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { FavoritesProvider } from "@/lib/context/favorites"
 import Header from "@/components/layout/header"
 import Footer from "@/components/layout/footer"
+import WhatsAppFloat from "@/components/whatsapp-float"
 import { usePathname } from "next/navigation"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -26,6 +27,7 @@ export default function RootLayout({
             {!isAdminRoute && <Header />}
             <main>{children}</main>
             {!isAdminRoute && <Footer />}
+            {!isAdminRoute && <WhatsAppFloat />}
           </FavoritesProvider>
         </ThemeProvider>
       </body>

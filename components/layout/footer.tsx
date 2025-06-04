@@ -94,7 +94,7 @@ export default function Footer() {
             <h3 className="text-yellow-400 font-medium">Contact Us</h3>
             <div className="space-y-4">
               <a
-                href="https://wa.me/2348000000000"
+                href="https://wa.me/2349131281389"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center space-x-3 text-gray-400 hover:text-yellow-400 transition-colors text-sm"
@@ -102,12 +102,11 @@ export default function Footer() {
                 <MessageCircle className="h-4 w-4" />
                 <span>WhatsApp</span>
               </a>
-              <a
-                href="mailto:hello@xquisitenoctea.com"
+              <a                href="mailto:xquisite001@outlook.com"
                 className="flex items-center space-x-3 text-gray-400 hover:text-yellow-400 transition-colors text-sm"
               >
                 <Mail className="h-4 w-4" />
-                <span>hello@xquisitenoctea.com</span>
+                <span>xquisite001@outlook.com</span>
               </a>
             </div>
           </div>

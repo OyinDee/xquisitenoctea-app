@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { ImageUpload } from "@/components/ui/image-upload"
+import ImageUpload from "@/components/ui/image-upload"
 import { ArrowLeft, Save, Trash2 } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"

@@ -21,7 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { ImageUpload } from "@/components/ui/image-upload"
+import ImageUpload from "@/components/ui/image-upload"
 import { AlertCircle, Check, Save, Send, Store, Trash2 } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"

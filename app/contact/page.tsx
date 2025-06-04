@@ -115,9 +115,8 @@ export default function ContactPage() {
                     <Mail className="h-5 w-5 text-black" />
                   </div>
                   <div>
-                    <h3 className="text-white font-medium mb-1">Email</h3>
-                    <a href="mailto:hello@xquisitenoctea.com" className="text-gray-400 hover:text-yellow-400 transition-colors">
-                      hello@xquisitenoctea.com
+                    <h3 className="text-white font-medium mb-1">Email</h3>                    <a href="mailto:xquisite001@outlook.com" className="text-gray-400 hover:text-yellow-400 transition-colors">
+                      xquisite001@outlook.com
                     </a>
                   </div>
                 </div>
@@ -127,9 +126,8 @@ export default function ContactPage() {
                     <Phone className="h-5 w-5 text-black" />
                   </div>
                   <div>
-                    <h3 className="text-white font-medium mb-1">Phone</h3>
-                    <a href="tel:+2348000000000" className="text-gray-400 hover:text-yellow-400 transition-colors">
-                      +234 800 000 0000
+                    <h3 className="text-white font-medium mb-1">Phone</h3>                    <a href="tel:+2349131281389" className="text-gray-400 hover:text-yellow-400 transition-colors">
+                      +234 913 128 1389
                     </a>
                   </div>
                 </div>
@@ -141,7 +139,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-white font-medium mb-1">WhatsApp</h3>
                     <a
-                      href="https://wa.me/2348000000000"
+                      href="https://wa.me/2349131281389"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-gray-400 hover:text-yellow-400 transition-colors"

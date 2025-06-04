@@ -1,3 +1,9 @@
+export interface OrderDetailPageProps {
+  params: {
+    id: string
+  }
+}
+
 "use client"
 
 import { useState, useEffect } from "react"
