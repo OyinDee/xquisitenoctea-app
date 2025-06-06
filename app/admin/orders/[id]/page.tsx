@@ -66,41 +66,6 @@ interface Order {
   updatedAt: string;
 }
 
-// Mock order data
-const mockOrder: Order = {
-  _id: "ord_123456",
-  orderNumber: "XQN-2023-12345",
-  customerName: "Jane Smith",
-  customerEmail: "jane.smith@example.com",
-  customerPhone: "+234 802 345 6789",
-  items: [
-    {
-      productId: "prod_001",
-      name: "Elegant Summer Dress",
-      price: 15000,
-      quantity: 1,
-      image: "https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg"
-    },
-    {
-      productId: "prod_002",
-      name: "Designer Handbag",
-      price: 12500,
-      quantity: 1,
-      image: "https://res.cloudinary.com/demo/image/upload/v1312461204/sample2.jpg"
-    }
-  ],
-  status: "processing",
-  subtotal: 27500,
-  shippingFee: 1500,
-  total: 29000,
-  shippingAddress: "123 Main Street, Lekki, Lagos, Nigeria",
-  paymentMethod: "Bank Transfer",
-  paymentStatus: "paid",
-  notes: "Please deliver in the morning if possible.",
-  createdAt: "2023-06-15T09:45:12Z",
-  updatedAt: "2023-06-15T10:30:45Z"
-};
-
 const statusColors = {
   pending: "bg-yellow-100 text-yellow-800 border-yellow-200",
   processing: "bg-blue-100 text-blue-800 border-blue-200",
@@ -115,138 +80,106 @@ const paymentStatusColors = {
   failed: "bg-red-100 text-red-800 border-red-200"
 };
 
-interface OrderDetailPageProps {
-  params: {
-    id: string
-  }
-}
-
-export default function OrderDetailPage({ params }: OrderDetailPageProps) {
+export default function OrderDetailPage({ params }: { params: { id: string } }) {
   const router = useRouter()
-  const { id } = params
-  
   const [order, setOrder] = useState<Order | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [isUpdating, setIsUpdating] = useState(false)
   const [currentStatus, setCurrentStatus] = useState<string>("")
-  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false)
   const [statusUpdateSuccess, setStatusUpdateSuccess] = useState(false)
-  
+
   useEffect(() => {
     fetchOrder()
-  }, [id])
-  
+  }, [params.id])
+
   const fetchOrder = async () => {
     setIsLoading(true)
     try {
-      // In a real app, fetch the order from your API
-      // For now, we'll use the mock data
-      setTimeout(() => {
-        setOrder(mockOrder)
-        setCurrentStatus(mockOrder.status)
-        setIsLoading(false)
-      }, 1000)
+      const response = await fetch(`/api/orders/${params.id}`)
+      if (response.ok) {
+        const data = await response.json()
+        setOrder(data)
+        setCurrentStatus(data.status)
+      } else {
+        console.error('Failed to fetch order')
+      }
     } catch (error) {
-      console.error("Error fetching order:", error)
+      console.error('Error fetching order:', error)
+    } finally {
       setIsLoading(false)
     }
   }
-  
-  const handleStatusChange = async (status: string) => {
+
+  const updateOrderStatus = async (newStatus: string) => {
     if (!order) return
-    
-    setIsUpdatingStatus(true)
+
+    setIsUpdating(true)
     try {
-      // In a real app, update the order status via API
-      // For now, simulate the update
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      setOrder({
-        ...order,
-        status: status as any,
-        updatedAt: new Date().toISOString()
+      const response = await fetch(`/api/orders/${params.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus }),
       })
-      setCurrentStatus(status)
-      setStatusUpdateSuccess(true)
-      
-      // Hide success message after 3 seconds
-      setTimeout(() => {
-        setStatusUpdateSuccess(false)
-      }, 3000)
+
+      if (response.ok) {
+        await fetchOrder() // Refresh order data
+        setCurrentStatus(newStatus)
+        setStatusUpdateSuccess(true)
+        
+        // Hide success message after 3 seconds
+        setTimeout(() => {
+          setStatusUpdateSuccess(false)
+        }, 3000)
+      } else {
+        console.error('Failed to update order status')
+      }
     } catch (error) {
-      console.error("Error updating order status:", error)
+      console.error('Error updating order status:', error)
     } finally {
-      setIsUpdatingStatus(false)
+      setIsUpdating(false)
     }
   }
-  
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-NG', {
+      style: 'currency',
+      currency: 'NGN',
+      minimumFractionDigits: 0
+    }).format(amount)
+  }
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-NG', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    })
+  }
+
   const printOrder = () => {
     window.print()
   }
-  
+
   if (isLoading) {
     return (
-      <div className="container mx-auto p-6">
-        <div className="flex items-center mb-6">
-          <Button variant="ghost" size="sm" onClick={() => router.back()}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
-          </Button>
-          <h1 className="text-2xl font-bold ml-4">Loading Order...</h1>
-        </div>
-        <div className="animate-pulse space-y-6">
-          <Card>
-            <CardHeader>
-              <div className="h-6 bg-gray-200 rounded w-1/4 mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/3"></div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="h-8 bg-gray-200 rounded"></div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader>
-              <div className="h-6 bg-gray-200 rounded w-1/4"></div>
-            </CardHeader>
-            <CardContent>
-              <div className="h-40 bg-gray-200 rounded"></div>
-            </CardContent>
-          </Card>
-        </div>
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
       </div>
     )
   }
-  
+
   if (!order) {
     return (
-      <div className="container mx-auto p-6">
-        <div className="flex items-center mb-6">
-          <Button variant="ghost" size="sm" onClick={() => router.back()}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
-          </Button>
-          <h1 className="text-2xl font-bold ml-4">Order Not Found</h1>
-        </div>
-        <Card>
-          <CardContent className="pt-6">
-            <p className="text-center text-muted-foreground">
-              The order you are looking for does not exist or has been deleted.
-            </p>
-            <div className="flex justify-center mt-6">
-              <Button onClick={() => router.push("/admin/orders")}>
-                Return to Orders
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-white text-xl">Order not found</div>
       </div>
     )
   }
-  
+
   return (
     <div className="container mx-auto p-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
@@ -263,7 +196,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
               </Badge>
             </h1>
             <p className="text-muted-foreground">
-              Placed on {new Date(order.createdAt).toLocaleString()}
+              Placed on {formatDate(order.createdAt)}
             </p>
           </div>
         </div>
@@ -323,10 +256,10 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
                           <span className="font-medium">{item.name}</span>
                         </div>
                       </TableCell>
-                      <TableCell>₦{item.price.toLocaleString()}</TableCell>
+                      <TableCell>₦{formatCurrency(item.price)}</TableCell>
                       <TableCell>{item.quantity}</TableCell>
                       <TableCell className="text-right">
-                        ₦{(item.price * item.quantity).toLocaleString()}
+                        ₦{formatCurrency(item.price * item.quantity)}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -336,16 +269,16 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
               <div className="mt-6 space-y-2">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span>₦{order.subtotal.toLocaleString()}</span>
+                  <span>₦{formatCurrency(order.subtotal)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Shipping</span>
-                  <span>₦{order.shippingFee.toLocaleString()}</span>
+                  <span>₦{formatCurrency(order.shippingFee)}</span>
                 </div>
                 <Separator className="my-2" />
                 <div className="flex justify-between font-bold">
                   <span>Total</span>
-                  <span>₦{order.total.toLocaleString()}</span>
+                  <span>₦{formatCurrency(order.total)}</span>
                 </div>
               </div>
             </CardContent>
@@ -361,7 +294,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
                   <div className="absolute -left-[25px] h-4 w-4 rounded-full bg-primary"></div>
                   <p className="font-medium">Order Placed</p>
                   <p className="text-sm text-muted-foreground">
-                    {new Date(order.createdAt).toLocaleString()}
+                    {formatDate(order.createdAt)}
                   </p>
                 </div>
                 
@@ -370,7 +303,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
                     <div className="absolute -left-[25px] h-4 w-4 rounded-full bg-primary"></div>
                     <p className="font-medium">Processing</p>
                     <p className="text-sm text-muted-foreground">
-                      {new Date(order.updatedAt).toLocaleString()}
+                      {formatDate(order.updatedAt)}
                     </p>
                   </div>
                 ) : null}
@@ -380,7 +313,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
                     <div className="absolute -left-[25px] h-4 w-4 rounded-full bg-primary"></div>
                     <p className="font-medium">Shipped</p>
                     <p className="text-sm text-muted-foreground">
-                      {new Date().toLocaleString()}
+                      {formatDate(new Date().toISOString())}
                     </p>
                   </div>
                 ) : null}
@@ -390,7 +323,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
                     <div className="absolute -left-[25px] h-4 w-4 rounded-full bg-primary"></div>
                     <p className="font-medium">Delivered</p>
                     <p className="text-sm text-muted-foreground">
-                      {new Date().toLocaleString()}
+                      {formatDate(new Date().toISOString())}
                     </p>
                   </div>
                 ) : null}
@@ -400,7 +333,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
                     <div className="absolute -left-[25px] h-4 w-4 rounded-full bg-destructive"></div>
                     <p className="font-medium">Cancelled</p>
                     <p className="text-sm text-muted-foreground">
-                      {new Date(order.updatedAt).toLocaleString()}
+                      {formatDate(order.updatedAt)}
                     </p>
                   </div>
                 ) : null}
@@ -448,8 +381,8 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
                 <div className="flex items-center gap-3 mt-1">
                   <Select
                     value={currentStatus}
-                    onValueChange={handleStatusChange}
-                    disabled={isUpdatingStatus}
+                    onValueChange={updateOrderStatus}
+                    disabled={isUpdating}
                   >
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder="Select status" />
@@ -463,7 +396,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
                     </SelectContent>
                   </Select>
                   
-                  {isUpdatingStatus && <span className="text-sm">Updating...</span>}
+                  {isUpdating && <span className="text-sm">Updating...</span>}
                 </div>
               </div>
               

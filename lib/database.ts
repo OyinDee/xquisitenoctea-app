@@ -32,82 +32,15 @@ async function connectToDatabase() {
   return { client, db }
 }
 
-// Initialize database with sample data
+// Initialize database
 export async function initializeDatabase() {
   try {
     console.log("Starting database initialization...")
     const { db } = await connectToDatabase()
     if (!db) throw new Error("Database connection failed")
-
-    // Check if products exist
-    const productsCollection = db.collection("products")
-    const productCount = await productsCollection.countDocuments()
-
-    if (productCount === 0) {
-      const sampleProducts = [
-        {
-          name: "Midnight Mystique",
-          description: "An intoxicating blend of jasmine and sandalwood that captures the essence of mysterious nights",
-          long_description:
-            "Midnight Mystique is a captivating fragrance that embodies the allure of the night. This sophisticated scent opens with the intoxicating sweetness of jasmine, creating an immediate sense of mystery and elegance. The heart reveals warm sandalwood that adds depth and sensuality, while vanilla provides a creamy sweetness that lingers beautifully on the skin.",
-          price: 25000,
-          image: "/placeholder.svg?height=500&width=400",
-          category: "perfumes",
-          notes: ["Jasmine", "Sandalwood", "Vanilla", "White Musk", "Bergamot"],
-          stock: 15,
-          size_options: [
-            { size: "30ml", price: 25000 },
-            { size: "50ml", price: 35000 },
-            { size: "100ml", price: 50000 },
-          ],
-          ingredients: ["Alcohol Denat", "Parfum", "Aqua", "Limonene", "Linalool", "Citronellol", "Geraniol"],
-          created_at: new Date(),
-          updated_at: new Date(),
-        },
-        {
-          name: "Luxury Body Cream",
-          description: "Rich, nourishing body cream with shea butter and essential oils for silky smooth skin",
-          long_description:
-            "Our luxury body cream is formulated with premium shea butter and essential oils to deeply nourish and hydrate your skin. The rich, velvety texture melts into your skin, leaving it silky smooth and delicately scented.",
-          price: 15000,
-          image: "/placeholder.svg?height=500&width=400",
-          category: "body-care",
-          notes: ["Shea Butter", "Jojoba Oil", "Vitamin E", "Aloe Vera"],
-          stock: 20,
-          size_options: [
-            { size: "200ml", price: 15000 },
-            { size: "400ml", price: 25000 },
-          ],
-          ingredients: ["Aqua", "Shea Butter", "Jojoba Oil", "Vitamin E", "Aloe Vera", "Glycerin"],
-          created_at: new Date(),
-          updated_at: new Date(),
-        },
-        {
-          name: "Hair Growth Serum",
-          description: "Advanced hair growth serum with natural ingredients for stronger, healthier hair",
-          long_description:
-            "Our hair growth serum combines powerful natural ingredients to promote healthy hair growth. Regular use helps strengthen hair follicles, reduce breakage, and improve overall hair health.",
-          price: 18000,
-          image: "/placeholder.svg?height=500&width=400",
-          category: "hair-care",
-          notes: ["Biotin", "Castor Oil", "Peppermint", "Rosemary"],
-          stock: 25,
-          size_options: [
-            { size: "30ml", price: 18000 },
-            { size: "60ml", price: 30000 },
-          ],
-          ingredients: ["Aqua", "Biotin", "Castor Oil", "Peppermint Oil", "Rosemary Oil", "Glycerin"],
-          created_at: new Date(),
-          updated_at: new Date(),
-        }
-      ]
-
-      await productsCollection.insertMany(sampleProducts)
-      console.log("Sample products created")
-    }
+    console.log("Database connection verified")
   } catch (error) {
-    console.error("Database initialization error:", error)
-    throw error
+    console.error("Error initializing database:", error)
   }
 }
 

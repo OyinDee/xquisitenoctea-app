@@ -257,10 +257,10 @@ export default function ProductDetailPage() {
               </CardContent>
             </Card>
 
-            {/* Fragrance Notes */}
+            {/* Key Features */}
             <Card className="bg-black/50 border-white/10">
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold text-white mb-4">Fragrance Notes</h3>
+                <h3 className="text-xl font-semibold text-white mb-4">Key Features</h3>
                 <div className="space-y-3">
                   {product.notes.map((note, index) => (
                     <div key={index} className="flex items-center space-x-3">

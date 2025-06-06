@@ -178,12 +178,12 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
           </div>
 
           <div>
-            <Label htmlFor="notes">Notes (comma-separated)</Label>
+            <Label htmlFor="notes">Key Features (comma-separated)</Label>
             <Input
               id="notes"
               value={formData.notes}
               onChange={(e) => handleChange("notes", e.target.value)}
-              placeholder="e.g., vanilla, jasmine, musk"
+              placeholder="e.g., moisturizing, anti-dandruff, natural ingredients"
             />
           </div>
         </div>

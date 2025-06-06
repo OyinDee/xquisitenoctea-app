@@ -31,17 +31,7 @@ const navItems = [
     title: "Orders",
     href: "/admin/orders",
     icon: ShoppingCart,
-  },
-  {
-    title: "Customers",
-    href: "/admin/customers",
-    icon: Users,
-  },
-  {
-    title: "Settings",
-    href: "/admin/settings",
-    icon: Settings,
-  },
+  }
 ]
 
 export default function AdminNav() {

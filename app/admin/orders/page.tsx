@@ -32,20 +32,30 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface Order {
   _id: string;
-  orderNumber: string;
-  customerName: string;
-  customerEmail: string;
+  id: string;
+  customer_info: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    address?: string;
+    city?: string;
+    state?: string;
+  };
   items: Array<{
-    productId: string;
+    id: number;
     name: string;
     price: number;
     quantity: number;
+    size: string;
   }>;
-  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
+  subtotal: number;
+  shipping: number;
   total: number;
-  shippingAddress: string;
-  paymentMethod: string;
-  createdAt: string;
+  payment_method: string;
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
+  created_at: string;
+  updated_at: string;
 }
 
 const statusColors = {
@@ -63,123 +73,39 @@ export default function OrdersPage() {
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [currentTab, setCurrentTab] = useState("all")
 
-  // Mock data for demonstration
   useEffect(() => {
-    const mockOrders: Order[] = [
-      {
-        _id: "1",
-        orderNumber: "ORD-001",
-        customerName: "John Doe",
-        customerEmail: "john@example.com",
-        items: [
-          { productId: "p1", name: "Premium Tea Blend", price: 4500, quantity: 2 },
-          { productId: "p2", name: "Herbal Infusion", price: 3800, quantity: 1 },
-        ],
-        status: "pending",
-        total: 12800,
-        shippingAddress: "123 Main St, Lagos, Nigeria",
-        paymentMethod: "Bank Transfer",
-        createdAt: "2023-06-01T12:00:00Z",
-      },
-      {
-        _id: "2",
-        orderNumber: "ORD-002",
-        customerName: "Jane Smith",
-        customerEmail: "jane@example.com",
-        items: [
-          { productId: "p3", name: "Flower Tea Collection", price: 6500, quantity: 1 },
-        ],
-        status: "processing",
-        total: 6500,
-        shippingAddress: "456 Park Ave, Abuja, Nigeria",
-        paymentMethod: "Paystack",
-        createdAt: "2023-06-02T10:00:00Z",
-      },
-      {
-        _id: "3",
-        orderNumber: "ORD-003",
-        customerName: "David Johnson",
-        customerEmail: "david@example.com",
-        items: [
-          { productId: "p4", name: "Tea Gift Set", price: 12000, quantity: 1 },
-          { productId: "p5", name: "Organic Green Tea", price: 3200, quantity: 2 },
-        ],
-        status: "delivered",
-        total: 18400,
-        shippingAddress: "789 Oak Dr, Port Harcourt, Nigeria",
-        paymentMethod: "Paystack",
-        createdAt: "2023-05-25T09:00:00Z",
-      },
-      {
-        _id: "4",
-        orderNumber: "ORD-004",
-        customerName: "Sarah Brown",
-        customerEmail: "sarah@example.com",
-        items: [
-          { productId: "p6", name: "Iced Tea Collection", price: 5000, quantity: 1 },
-        ],
-        status: "shipped",
-        total: 5000,
-        shippingAddress: "321 Elm St, Lagos, Nigeria",
-        paymentMethod: "Bank Transfer",
-        createdAt: "2023-06-03T14:00:00Z",
-      },
-      {
-        _id: "5",
-        orderNumber: "ORD-005",
-        customerName: "Michael Wilson",
-        customerEmail: "michael@example.com",
-        items: [
-          { productId: "p7", name: "Chai Tea Kit", price: 8500, quantity: 1 },
-          { productId: "p8", name: "Teapot Set", price: 15000, quantity: 1 },
-        ],
-        status: "cancelled",
-        total: 23500,
-        shippingAddress: "654 Pine Rd, Ibadan, Nigeria",
-        paymentMethod: "Paystack",
-        createdAt: "2023-05-20T08:00:00Z",
-      },
-    ];
-
-    // Simulate API call
-    setTimeout(() => {
-      setOrders(mockOrders);
-      setIsLoading(false);
-    }, 1000);
-
-    // In a real app, you would fetch from API
-    // fetchOrders();
-  }, []);
+    fetchOrders()
+  }, [])
 
   const fetchOrders = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      const response = await fetch('/api/orders');
+      const response = await fetch('/api/orders')
       if (response.ok) {
-        const data = await response.json();
-        setOrders(data);
+        const data = await response.json()
+        setOrders(data)
       } else {
-        console.error('Failed to fetch orders');
+        console.error('Failed to fetch orders')
       }
     } catch (error) {
-      console.error('Error fetching orders:', error);
+      console.error('Error fetching orders:', error)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   // Filter orders based on search query and status
   const filteredOrders = orders.filter(order => {
     const matchesSearch = 
-      order.orderNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.customerEmail.toLowerCase().includes(searchQuery.toLowerCase());
+      order.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      `${order.customer_info.firstName} ${order.customer_info.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order.customer_info.email.toLowerCase().includes(searchQuery.toLowerCase());
     
     const matchesStatus = statusFilter === "all" || order.status === statusFilter;
     
     const matchesTab = 
       currentTab === "all" || 
-      (currentTab === "recent" && new Date(order.createdAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)) ||
+      (currentTab === "recent" && new Date(order.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)) ||
       (currentTab === order.status);
     
     return matchesSearch && matchesStatus && matchesTab;
@@ -271,14 +197,14 @@ export default function OrdersPage() {
                 <TableBody>
                   {filteredOrders.map((order) => (
                     <TableRow key={order._id}>
-                      <TableCell className="font-medium">{order.orderNumber}</TableCell>
+                      <TableCell className="font-medium">{order.id}</TableCell>
                       <TableCell>
                         <div>
-                          <p className="font-medium">{order.customerName}</p>
-                          <p className="text-sm text-muted-foreground">{order.customerEmail}</p>
+                          <p className="font-medium">{`${order.customer_info.firstName} ${order.customer_info.lastName}`}</p>
+                          <p className="text-sm text-muted-foreground">{order.customer_info.email}</p>
                         </div>
                       </TableCell>
-                      <TableCell>{formatDate(order.createdAt)}</TableCell>
+                      <TableCell>{formatDate(order.created_at)}</TableCell>
                       <TableCell>
                         <Badge 
                           variant="outline" 

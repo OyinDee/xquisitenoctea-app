@@ -67,47 +67,24 @@ export default function ProductFormPage({ params }: ProductFormProps) {
     const fetchProduct = async () => {
     setIsLoading(true)
     try {
-      // In a real app, this would be a fetch from your API
-      // For now, we'll simulate it with a timeout and mock data
-      console.log("Fetching product with ID:", id);
-      
-      // Try to fetch from API first, if that fails use mock data
-      try {
-        const response = await fetch(`/api/products/${id}`);
-        if (response.ok) {
-          const data = await response.json();
-          setProduct({
-            name: data.name,
-            description: data.description,
-            price: data.price.toString(),
-            stock: data.stock.toString(),
-            category: data.category,
-            images: data.images || []
-          });
-          setIsLoading(false);
-          return;
-        }
-      } catch (apiError) {
-        console.log("API fetch failed, using mock data instead");
-      }
-      
-      // Fallback to mock data
-      setTimeout(() => {
+      const response = await fetch(`/api/products/${id}`)
+      if (response.ok) {
+        const data = await response.json()
         setProduct({
-          name: "Elegant Summer Dress",
-          description: "A beautiful and comfortable summer dress perfect for any occasion.",
-          price: "15000",
-          stock: "10",
-          category: "Dresses",
-          images: [
-            "https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg",
-            "https://res.cloudinary.com/demo/image/upload/v1312461204/sample2.jpg"
-          ]
+          name: data.name,
+          description: data.description,
+          price: data.price.toString(),
+          stock: data.stock.toString(),
+          category: data.category,
+          images: data.images || []
         })
-        setIsLoading(false)
-      }, 1000)
+      } else {
+        throw new Error("Failed to fetch product")
+      }
     } catch (error) {
       console.error("Error fetching product:", error)
+      setSaveError("Failed to fetch product. Please try again.")
+    } finally {
       setIsLoading(false)
     }
   }
@@ -145,9 +122,21 @@ export default function ProductFormPage({ params }: ProductFormProps) {
         throw new Error("Please fill in all required fields")
       }
       
-      // In a real app, this would be a POST or PUT request to your API
-      // For now, we'll simulate it with a timeout
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      const response = await fetch(`/api/products/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...product,
+          price: parseFloat(product.price),
+          stock: parseInt(product.stock),
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to update product")
+      }
       
       // Redirect back to products page on success
       router.push("/admin/products")
@@ -161,14 +150,19 @@ export default function ProductFormPage({ params }: ProductFormProps) {
   
   const handleDelete = async () => {
     try {
-      // In a real app, this would be a DELETE request to your API
-      // For now, we'll simulate it with a timeout
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      const response = await fetch(`/api/products/${id}`, {
+        method: "DELETE",
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to delete product")
+      }
       
       // Redirect back to products page on success
       router.push("/admin/products")
     } catch (error) {
       console.error("Error deleting product:", error)
+      setSaveError("Failed to delete product. Please try again.")
     }
   }
   

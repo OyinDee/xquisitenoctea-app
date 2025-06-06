@@ -188,29 +188,6 @@ export default function ContactPage() {
                 </div>
               </div>
             </div>
-
-            <div className="bg-gray-900/50 backdrop-blur-sm rounded-2xl p-8 border border-yellow-400/20 hover:border-yellow-400/40 transition-all duration-300">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
-                  <Clock className="h-6 w-6 text-black" />
-                </div>
-                <h2 className="text-2xl font-semibold text-white">Business Hours</h2>
-              </div>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center py-2 border-b border-yellow-400/20">
-                  <span className="text-gray-300">Monday - Friday</span>
-                  <span className="text-yellow-400">9:00 AM - 6:00 PM</span>
-                </div>
-                <div className="flex justify-between items-center py-2 border-b border-yellow-400/20">
-                  <span className="text-gray-300">Saturday</span>
-                  <span className="text-yellow-400">10:00 AM - 4:00 PM</span>
-                </div>
-                <div className="flex justify-between items-center py-2">
-                  <span className="text-gray-300">Sunday</span>
-                  <span className="text-yellow-400">Closed</span>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
