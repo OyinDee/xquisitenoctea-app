@@ -26,16 +26,10 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 // Product categories for the dropdown
 const productCategories = [
-  "Dresses",
-  "Tops",
-  "Bottoms",
-  "Outerwear",
-  "Accessories",
-  "Footwear",
-  "Jewelry",
-  "Bags",
-  "Traditional",
-  "Other"
+  "perfumes",
+  "body-care",
+  "hair-care",
+  "feminine-essentials"
 ]
 
 export default function NewProductPage() {

@@ -17,6 +17,7 @@ interface OrderData {
     name: string
     price: number
     quantity: number
+    size?: string
   }>
   subtotal: number
   shipping: number
@@ -25,8 +26,10 @@ interface OrderData {
     name: string
     email: string
     address: string
+    phone?: string
   }
   createdAt: string
+  paymentMethod: string
 }
 
 export default function OrderConfirmationPage() {
@@ -105,7 +108,7 @@ export default function OrderConfirmationPage() {
     <div className="min-h-screen bg-black pt-24 pb-16">
       <div className="max-w-3xl mx-auto px-6">
         {/* Order Success Card */}
-        <Card className="bg-gray-900 border-gray-800 mb-8">
+        <Card className="bg-gray-900 border-gray-800 mb-8 no-print">
           <CardContent className="p-6">
             <div className="text-center">
               <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
@@ -129,8 +132,8 @@ export default function OrderConfirmationPage() {
           </CardContent>
         </Card>
 
-        {/* Receipt Card - Only visible in print mode */}
-        <div className="print:block hidden">
+        {/* Receipt - Only visible in print mode */}
+        <div className="print-only">
           <Receipt order={orderData} />
         </div>
 
@@ -144,6 +147,7 @@ export default function OrderConfirmationPage() {
                   <p className="text-gray-300">Order number: {orderData.id}</p>
                   <p className="text-gray-300">Status: {orderData.status}</p>
                   <p className="text-gray-300">Estimated delivery: {orderData.estimatedDelivery}</p>
+                  <p className="text-gray-300">Payment method: {orderData.paymentMethod}</p>
                 </div>
               </div>
 
@@ -153,7 +157,9 @@ export default function OrderConfirmationPage() {
                   {orderData.items.map((item) => (
                     <div key={item.id} className="flex justify-between">
                       <div className="text-gray-300">
-                        {item.name} x {item.quantity}
+                        {item.name}
+                        {item.size && <span className="text-sm text-gray-400"> ({item.size})</span>}
+                        <span className="text-sm text-gray-400"> x {item.quantity}</span>
                       </div>
                       <div className="text-gray-300">₦{item.price * item.quantity}</div>
                     </div>
@@ -165,31 +171,16 @@ export default function OrderConfirmationPage() {
                 <h3 className="text-lg font-semibold text-white mb-4">Shipping Information</h3>
                 <div className="text-gray-300">
                   <p>{orderData.customer.name}</p>
+                  <p>{orderData.customer.email}</p>
+                  {orderData.customer.phone && <p>{orderData.customer.phone}</p>}
                   <p>{orderData.customer.address}</p>
-                </div>
-              </div>
-
-              <div className="border-t border-gray-800 pt-4">
-                <div className="space-y-2">
-                  <div className="flex justify-between text-gray-300">
-                    <span>Subtotal:</span>
-                    <span>₦{orderData.subtotal}</span>
-                  </div>
-                  <div className="flex justify-between text-gray-300">
-                    <span>Shipping:</span>
-                    <span>₦{orderData.shipping}</span>
-                  </div>
-                  <div className="flex justify-between text-xl font-semibold text-white">
-                    <span>Total:</span>
-                    <span>₦{orderData.total}</span>
-                  </div>
                 </div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Help Card */}
+        {/* Help Card - Hidden in print mode */}
         <Card className="bg-gray-900 border-gray-800 mt-8 no-print">
           <CardContent className="p-6">
             <h3 className="text-lg font-semibold text-white mb-4">Need Help?</h3>

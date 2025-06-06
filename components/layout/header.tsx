@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -11,6 +12,29 @@ import { Menu, ShoppingCart, Heart, User, Search } from "lucide-react"
 export default function Header() {
   const [cartItemCount, setCartItemCount] = useState(0)
   const [isOpen, setIsOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const pathname = usePathname()
+  const isHomePage = pathname === "/"
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Only check scroll position on home page
+      if (isHomePage) {
+        const heroHeight = window.innerHeight * 0.6
+        setIsScrolled(window.scrollY > heroHeight)
+      }
+    }
+
+    // Add scroll event listener
+    window.addEventListener('scroll', handleScroll)
+    
+    // Initial check
+    handleScroll()
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [isHomePage])
 
   useEffect(() => {
     const updateCartCount = () => {
@@ -41,7 +65,11 @@ export default function Header() {
   ]
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-transparent">
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      isHomePage 
+        ? (isScrolled ? 'bg-black/30 backdrop-blur-sm' : 'bg-transparent')
+        : 'bg-black/30 backdrop-blur-sm'
+    }`}>
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}

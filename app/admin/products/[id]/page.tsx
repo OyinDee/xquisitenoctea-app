@@ -28,16 +28,10 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 
 // Product categories for the dropdown
 const productCategories = [
-  "Dresses",
-  "Tops",
-  "Bottoms",
-  "Outerwear",
-  "Accessories",
-  "Footwear",
-  "Jewelry",
-  "Bags",
-  "Traditional",
-  "Other"
+  "perfumes",
+  "body-care",
+  "hair-care",
+  "feminine-essentials"
 ]
 
 interface ProductFormProps {

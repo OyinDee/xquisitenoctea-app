@@ -129,55 +129,56 @@ html {
     padding: 0;
   }
   
-  .print-receipt {
-    background-color: white !important;
-    color: black !important;
-    padding: 20px;
-    max-width: 100%;
-    margin: 0 auto;
-    box-shadow: none !important;
+  .print-only {
+    display: block !important;
   }
   
   .no-print {
     display: none !important;
   }
   
-  .print-receipt h1 {
-    font-size: 18pt;
-    margin-bottom: 10px;
+  /* Hide all other elements */
+  body > *:not(.print-only) {
+    display: none !important;
   }
   
-  .print-receipt h2 {
-    font-size: 16pt;
-    margin-bottom: 8px;
+  /* Ensure the receipt takes full width */
+  .print-only > div {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 20px !important;
+    box-shadow: none !important;
   }
   
-  .print-receipt p {
-    margin-bottom: 5px;
+  /* Ensure images print */
+  img {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
   }
   
-  .print-only {
-    display: block !important;
+  /* Ensure background colors print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
   
-  .print-receipt-header {
-    text-align: center;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #000;
-    padding-bottom: 10px;
+  /* Remove any background images */
+  .bg-[url] {
+    background-image: none !important;
   }
   
-  .print-receipt-logo {
-    max-width: 150px;
-    margin: 0 auto 10px;
-    display: block;
+  /* Ensure text is black */
+  .text-white,
+  .text-gray-300,
+  .text-gray-400,
+  .text-gray-600 {
+    color: black !important;
   }
   
-  .print-receipt-footer {
-    margin-top: 30px;
-    text-align: center;
-    font-size: 10pt;
-    border-top: 1px solid #000;
-    padding-top: 10px;
+  /* Ensure borders are visible */
+  .border-gray-200,
+  .border-gray-100 {
+    border-color: #ddd !important;
   }
 }

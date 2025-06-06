@@ -116,32 +116,15 @@ export default function ShopPage() {
           </div>
 
           <Select value={filterBy} onValueChange={setFilterBy}>
-            <SelectTrigger className="w-full lg:w-48 bg-black border-gray-700 text-white">
-              <Filter className="h-4 w-4 mr-2" />
+            <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Filter by category" />
             </SelectTrigger>
-            <SelectContent className="bg-gray-900 border-gray-700">
-              <SelectItem value="all" className="text-white hover:bg-gray-800">
-                All Categories
-              </SelectItem>
-              <SelectItem value="floral" className="text-white hover:bg-gray-800">
-                Floral
-              </SelectItem>
-              <SelectItem value="oriental" className="text-white hover:bg-gray-800">
-                Oriental
-              </SelectItem>
-              <SelectItem value="woody" className="text-white hover:bg-gray-800">
-                Woody
-              </SelectItem>
-              <SelectItem value="spicy" className="text-white hover:bg-gray-800">
-                Spicy
-              </SelectItem>
-              <SelectItem value="fresh" className="text-white hover:bg-gray-800">
-                Fresh
-              </SelectItem>
-              <SelectItem value="gourmand" className="text-white hover:bg-gray-800">
-                Gourmand
-              </SelectItem>
+            <SelectContent>
+              <SelectItem value="all">All Categories</SelectItem>
+              <SelectItem value="perfumes">Perfumes</SelectItem>
+              <SelectItem value="body-care">Body Care</SelectItem>
+              <SelectItem value="hair-care">Hair Care</SelectItem>
+              <SelectItem value="feminine-essentials">Feminine Essentials</SelectItem>
             </SelectContent>
           </Select>
 

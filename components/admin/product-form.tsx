@@ -145,12 +145,10 @@ export default function ProductForm({ initialData, onSubmit, isSubmitting }: Pro
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="floral">Floral</SelectItem>
-                <SelectItem value="oriental">Oriental</SelectItem>
-                <SelectItem value="woody">Woody</SelectItem>
-                <SelectItem value="spicy">Spicy</SelectItem>
-                <SelectItem value="fresh">Fresh</SelectItem>
-                <SelectItem value="gourmand">Gourmand</SelectItem>
+                <SelectItem value="perfumes">Perfumes</SelectItem>
+                <SelectItem value="body-care">Body Care</SelectItem>
+                <SelectItem value="hair-care">Hair Care</SelectItem>
+                <SelectItem value="feminine-essentials">Feminine Essentials</SelectItem>
               </SelectContent>
             </Select>
           </div>

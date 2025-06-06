@@ -82,8 +82,7 @@ export default function HomePage() {
             </p>
 
             <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 max-w-xs sm:max-w-md md:max-w-2xl mx-auto leading-relaxed animate-fade-in-up animation-delay-600 px-4">
-              Discover our exclusive collection of luxury perfumes, crafted for those who embrace the mystery of the
-              night and the power of allure.
+            Discover our exclusive collection of luxury perfumes, handmade skincare, body care and feminine essentials, crafted with intention and love for those  who embrace the mystery of the night,  the power of allure and elevate one self-care ritual.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center pt-4 sm:pt-6 lg:pt-8 animate-fade-in-up animation-delay-900">
@@ -94,12 +93,14 @@ export default function HomePage() {
                 </Button>
               </Link>
 
-              <Button
-                variant="outline"
-                className="w-full sm:w-auto border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg transition-all duration-300 hover:shadow-lg hover:shadow-yellow-400/25"
-              >
-                Discover Our Story
-              </Button>
+              <Link href="/about">
+                <Button
+                  variant="outline"
+                  className="w-full sm:w-auto border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg transition-all duration-300 hover:shadow-lg hover:shadow-yellow-400/25"
+                >
+                  Discover Our Story
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -123,7 +124,7 @@ export default function HomePage() {
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6">Featured Collection</h2>
             <div className="w-16 sm:w-24 h-1 bg-yellow-400 mx-auto mb-4 sm:mb-6"></div>
             <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto px-4">
-              Handpicked fragrances that embody elegance, mystery, and timeless allure
+              Curated selection of luxury perfumes, body care, hair treatments, and feminine essentials for all
             </p>
           </div>
 
@@ -191,11 +192,11 @@ export default function HomePage() {
             <div>
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
                 The Art of
-                <span className="text-yellow-400 block">Sophisticated Scent</span>
+                <span className="text-yellow-400 block">Luxury Self-Care</span>
               </h2>
               <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-                Each Xquisitenoctéa fragrance is meticulously crafted to capture the essence of night's allure. Our
-                perfumes are more than scents—they're expressions of elegance, mystery, and timeless sophistication.
+                Each Xquisitenoctéa product is meticulously crafted to elevate your self-care ritual. From perfumes to body care, 
+                hair treatments to feminine essentials, we create products that speak to your soul and enhance your natural beauty.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="flex items-center space-x-3">

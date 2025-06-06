@@ -22,8 +22,8 @@ export default function Footer() {
               <span className="text-white font-bold text-xl">Xquisitenoctéa</span>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed max-w-md">
-              Born of night, made for allure. Discover exquisite fragrances that capture the mystery and elegance of
-              sophisticated scent.
+              Born of night, made for allure. Discover our exclusive collection of luxury perfumes, body care, hair treatments, 
+              and feminine essentials, crafted with intention and love for those who embrace the mystery of the night.
             </p>
             <div className="flex space-x-6">
               <a
@@ -71,18 +71,23 @@ export default function Footer() {
               <h3 className="text-yellow-400 font-medium mb-6">Categories</h3>
               <ul className="space-y-4">
                 <li>
-                  <Link href="/shop?category=floral" className="text-gray-400 hover:text-yellow-400 transition-colors text-sm">
-                    Floral
+                  <Link href="/shop?category=perfumes" className="text-gray-400 hover:text-yellow-400 transition-colors text-sm">
+                    Perfumes
                   </Link>
                 </li>
                 <li>
-                  <Link href="/shop?category=oriental" className="text-gray-400 hover:text-yellow-400 transition-colors text-sm">
-                    Oriental
+                  <Link href="/shop?category=body-care" className="text-gray-400 hover:text-yellow-400 transition-colors text-sm">
+                    Body Care
                   </Link>
                 </li>
                 <li>
-                  <Link href="/shop?category=woody" className="text-gray-400 hover:text-yellow-400 transition-colors text-sm">
-                    Woody
+                  <Link href="/shop?category=hair-care" className="text-gray-400 hover:text-yellow-400 transition-colors text-sm">
+                    Hair Care
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/shop?category=feminine-essentials" className="text-gray-400 hover:text-yellow-400 transition-colors text-sm">
+                    Feminine Essentials
                   </Link>
                 </li>
               </ul>
