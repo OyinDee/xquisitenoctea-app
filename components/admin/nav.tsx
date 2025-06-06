@@ -31,6 +31,11 @@ const navItems = [
     title: "Orders",
     href: "/admin/orders",
     icon: ShoppingCart,
+  },
+  {
+    title: "Admins",
+    href: "/admin/admins",
+    icon: Users,
   }
 ]
 

@@ -124,7 +124,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
     setError(null)
     try {
       const response = await fetch(`/api/orders/${resolvedParams.id}`, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -141,12 +141,19 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           setStatusUpdateSuccess(false)
         }, 3000)
       } else {
-        const errorData = await response.json()
-        setError(errorData.error || 'Failed to update order status')
-        console.error('Failed to update order status:', errorData)
+        let errorMessage = 'Failed to update order status'
+        try {
+          const errorData = await response.json()
+          errorMessage = errorData.error || errorMessage
+        } catch (e) {
+          console.error('Error parsing error response:', e)
+        }
+        setError(errorMessage)
+        console.error('Failed to update order status:', errorMessage)
       }
     } catch (error) {
-      setError('Error updating order status')
+      const errorMessage = error instanceof Error ? error.message : 'Error updating order status'
+      setError(errorMessage)
       console.error('Error updating order status:', error)
     } finally {
       setIsUpdating(false)
@@ -248,14 +255,18 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
     const printWindow = window.open('', '_blank')
     if (printWindow) {
       printWindow.document.write(`
+        <!DOCTYPE html>
         <html>
           <head>
             <title>Order Receipt - ${order.id}</title>
+            <meta charset="utf-8">
             <style>
               body {
                 font-family: Arial, sans-serif;
                 line-height: 1.6;
                 color: #000;
+                margin: 0;
+                padding: 0;
               }
               .print-only {
                 padding: 20px;
@@ -263,10 +274,12 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
               table {
                 width: 100%;
                 border-collapse: collapse;
+                margin-bottom: 1rem;
               }
               th, td {
                 padding: 8px;
                 text-align: left;
+                border-bottom: 1px solid #ddd;
               }
               .text-right {
                 text-align: right;
@@ -299,6 +312,12 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
               .border-b {
                 border-bottom: 1px solid #ddd;
               }
+              @media print {
+                body {
+                  -webkit-print-color-adjust: exact;
+                  print-color-adjust: exact;
+                }
+              }
             </style>
           </head>
           <body>
@@ -306,13 +325,18 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           </body>
         </html>
       `)
+      
+      // Wait for content to load before printing
       printWindow.document.close()
       printWindow.focus()
       
-      // Wait for images to load before printing
+      // Add a small delay to ensure content is loaded
       setTimeout(() => {
         printWindow.print()
-        printWindow.close()
+        // Close the window after printing
+        setTimeout(() => {
+          printWindow.close()
+        }, 1000)
       }, 500)
     }
   }
