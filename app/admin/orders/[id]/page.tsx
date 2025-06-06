@@ -186,67 +186,100 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
     
     // Create receipt content
     printContent.innerHTML = `
-      <div class="p-8 max-w-md mx-auto">
-        <div class="text-center mb-6">
-          <h1 class="text-2xl font-bold mb-2">Xquisite Noctea</h1>
-          <p class="text-sm">Order Receipt</p>
+      <div class="receipt">
+        <div class="receipt-header">
+          <div class="logo">
+            <img src="/logo.jpg" alt="Xquisite Noctea" class="logo-img" />
+          </div>
+          <h1 class="store-name">Xquisite Noctea</h1>
+          <p class="store-tagline">Luxury Fragrances & Body Care</p>
         </div>
         
-        <div class="mb-6">
-          <p class="font-medium">Order #${order.id}</p>
-          <p class="text-sm">Date: ${formatDate(order.created_at)}</p>
+        <div class="receipt-info">
+          <div class="order-number">
+            <span class="label">Order #</span>
+            <span class="value">${order.id}</span>
+          </div>
+          <div class="order-date">
+            <span class="label">Date</span>
+            <span class="value">${formatDate(order.created_at)}</span>
+          </div>
         </div>
         
-        <div class="mb-6">
-          <h2 class="font-medium mb-2">Customer Information</h2>
-          <p>${order.customer_info.firstName} ${order.customer_info.lastName}</p>
-          <p>${order.customer_info.email}</p>
-          <p>${order.customer_info.phone}</p>
-          <p>${order.customer_info.address}</p>
-          <p>${order.customer_info.city}, ${order.customer_info.state}</p>
+        <div class="receipt-section">
+          <h2>Customer Information</h2>
+          <div class="customer-info">
+            <p class="name">${order.customer_info.firstName} ${order.customer_info.lastName}</p>
+            <p class="contact">${order.customer_info.email}</p>
+            <p class="contact">${order.customer_info.phone}</p>
+            <p class="address">${order.customer_info.address}</p>
+            <p class="address">${order.customer_info.city}, ${order.customer_info.state}</p>
+          </div>
         </div>
         
-        <div class="mb-6">
-          <h2 class="font-medium mb-2">Order Items</h2>
-          <table class="w-full mb-4">
+        <div class="receipt-section">
+          <h2>Order Items</h2>
+          <table class="items-table">
             <thead>
-              <tr class="border-b">
-                <th class="text-left py-2">Item</th>
-                <th class="text-right py-2">Price</th>
-                <th class="text-right py-2">Qty</th>
-                <th class="text-right py-2">Total</th>
+              <tr>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Total</th>
               </tr>
             </thead>
             <tbody>
               ${order.items.map(item => `
-                <tr class="border-b">
-                  <td class="py-2">${item.name} (${item.size})</td>
-                  <td class="text-right py-2">₦${formatCurrency(item.price)}</td>
-                  <td class="text-right py-2">${item.quantity}</td>
-                  <td class="text-right py-2">₦${formatCurrency(item.price * item.quantity)}</td>
+                <tr>
+                  <td class="item-name">${item.name} <span class="item-size">(${item.size})</span></td>
+                  <td class="item-price">₦${formatCurrency(item.price)}</td>
+                  <td class="item-quantity">${item.quantity}</td>
+                  <td class="item-total">₦${formatCurrency(item.price * item.quantity)}</td>
                 </tr>
               `).join('')}
             </tbody>
           </table>
           
-          <div class="text-right">
-            <p>Subtotal: ₦${formatCurrency(order.subtotal)}</p>
-            <p>Shipping: ₦${formatCurrency(order.shipping)}</p>
-            <p class="font-bold">Total: ₦${formatCurrency(order.total)}</p>
+          <div class="order-summary">
+            <div class="summary-row">
+              <span class="label">Subtotal</span>
+              <span class="value">₦${formatCurrency(order.subtotal)}</span>
+            </div>
+            <div class="summary-row">
+              <span class="label">Shipping</span>
+              <span class="value">₦${formatCurrency(order.shipping)}</span>
+            </div>
+            <div class="summary-row total">
+              <span class="label">Total</span>
+              <span class="value">₦${formatCurrency(order.total)}</span>
+            </div>
           </div>
         </div>
         
-        <div class="mb-6">
-          <h2 class="font-medium mb-2">Payment Information</h2>
-          <p>Method: ${order.payment_method}</p>
-          <p>Status: ${order.payment_status || 'pending'}</p>
+        <div class="receipt-section">
+          <h2>Payment Information</h2>
+          <div class="payment-info">
+            <div class="payment-row">
+              <span class="label">Method</span>
+              <span class="value">${order.payment_method}</span>
+            </div>
+            <div class="payment-row">
+              <span class="label">Status</span>
+              <span class="value status ${order.payment_status || 'pending'}">${order.payment_status || 'pending'}</span>
+            </div>
+          </div>
         </div>
         
-        <div class="text-center text-sm mt-8">
-          <p>Thank you for your purchase!</p>
-          <p>For any questions, please contact us at:</p>
-          <p>Email: support@xquisitenoctea.com</p>
-          <p>Phone: +234 802 345 6789</p>
+        <div class="receipt-footer">
+          <p class="thank-you">Thank you for your purchase!</p>
+          <div class="contact-info">
+            <p>For any questions, please contact us at:</p>
+            <p>Email: support@xquisitenoctea.com</p>
+            <p>Phone: +234 802 345 6789</p>
+          </div>
+          <div class="barcode">
+            <img src="/barcode.png" alt="Order Barcode" class="barcode-img" />
+          </div>
         </div>
       </div>
     `
@@ -261,61 +294,246 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
             <title>Order Receipt - ${order.id}</title>
             <meta charset="utf-8">
             <style>
+              @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+              
               body {
-                font-family: Arial, sans-serif;
+                font-family: 'Inter', sans-serif;
                 line-height: 1.6;
-                color: #000;
+                color: #1a1a1a;
                 margin: 0;
                 padding: 0;
+                background: #fff;
               }
-              .print-only {
+              
+              .receipt {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 40px;
+                background: #fff;
+              }
+              
+              .receipt-header {
+                text-align: center;
+                margin-bottom: 40px;
+                padding-bottom: 20px;
+                border-bottom: 2px solid #f0f0f0;
+              }
+              
+              .logo {
+                margin-bottom: 20px;
+              }
+              
+              .logo-img {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                object-fit: cover;
+              }
+              
+              .store-name {
+                font-size: 28px;
+                font-weight: 700;
+                color: #1a1a1a;
+                margin: 0 0 8px;
+              }
+              
+              .store-tagline {
+                font-size: 16px;
+                color: #666;
+                margin: 0;
+              }
+              
+              .receipt-info {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 30px;
                 padding: 20px;
+                background: #f8f8f8;
+                border-radius: 8px;
               }
-              table {
+              
+              .order-number, .order-date {
+                display: flex;
+                flex-direction: column;
+              }
+              
+              .label {
+                font-size: 14px;
+                color: #666;
+                margin-bottom: 4px;
+              }
+              
+              .value {
+                font-size: 16px;
+                font-weight: 600;
+                color: #1a1a1a;
+              }
+              
+              .receipt-section {
+                margin-bottom: 30px;
+                padding: 20px;
+                background: #fff;
+                border: 1px solid #f0f0f0;
+                border-radius: 8px;
+              }
+              
+              .receipt-section h2 {
+                font-size: 18px;
+                font-weight: 600;
+                color: #1a1a1a;
+                margin: 0 0 20px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #f0f0f0;
+              }
+              
+              .customer-info {
+                display: grid;
+                gap: 8px;
+              }
+              
+              .customer-info .name {
+                font-weight: 600;
+                font-size: 16px;
+                margin: 0;
+              }
+              
+              .customer-info .contact,
+              .customer-info .address {
+                color: #666;
+                margin: 0;
+              }
+              
+              .items-table {
                 width: 100%;
                 border-collapse: collapse;
-                margin-bottom: 1rem;
+                margin-bottom: 20px;
               }
-              th, td {
-                padding: 8px;
+              
+              .items-table th {
                 text-align: left;
-                border-bottom: 1px solid #ddd;
+                padding: 12px;
+                font-weight: 600;
+                color: #666;
+                border-bottom: 2px solid #f0f0f0;
               }
-              .text-right {
-                text-align: right;
+              
+              .items-table td {
+                padding: 12px;
+                border-bottom: 1px solid #f0f0f0;
               }
-              .text-center {
-                text-align: center;
-              }
-              .font-bold {
-                font-weight: bold;
-              }
-              .font-medium {
+              
+              .item-name {
                 font-weight: 500;
               }
-              .mb-2 {
-                margin-bottom: 0.5rem;
+              
+              .item-size {
+                color: #666;
+                font-size: 14px;
               }
-              .mb-4 {
-                margin-bottom: 1rem;
+              
+              .item-price,
+              .item-quantity,
+              .item-total {
+                text-align: right;
               }
-              .mb-6 {
-                margin-bottom: 1.5rem;
+              
+              .order-summary {
+                margin-top: 20px;
+                padding-top: 20px;
+                border-top: 2px solid #f0f0f0;
               }
-              .mt-8 {
-                margin-top: 2rem;
+              
+              .summary-row {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 8px;
               }
-              .py-2 {
-                padding-top: 0.5rem;
-                padding-bottom: 0.5rem;
+              
+              .summary-row.total {
+                margin-top: 12px;
+                padding-top: 12px;
+                border-top: 1px solid #f0f0f0;
+                font-weight: 700;
+                font-size: 18px;
               }
-              .border-b {
-                border-bottom: 1px solid #ddd;
+              
+              .payment-info {
+                display: grid;
+                gap: 12px;
               }
+              
+              .payment-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+              }
+              
+              .status {
+                padding: 4px 12px;
+                border-radius: 20px;
+                font-size: 14px;
+                font-weight: 500;
+              }
+              
+              .status.paid {
+                background: #e6f4ea;
+                color: #1e7e34;
+              }
+              
+              .status.pending {
+                background: #fff3cd;
+                color: #856404;
+              }
+              
+              .status.failed {
+                background: #f8d7da;
+                color: #721c24;
+              }
+              
+              .receipt-footer {
+                text-align: center;
+                margin-top: 40px;
+                padding-top: 30px;
+                border-top: 2px solid #f0f0f0;
+              }
+              
+              .thank-you {
+                font-size: 18px;
+                font-weight: 600;
+                color: #1a1a1a;
+                margin: 0 0 20px;
+              }
+              
+              .contact-info {
+                color: #666;
+                margin-bottom: 30px;
+              }
+              
+              .contact-info p {
+                margin: 4px 0;
+              }
+              
+              .barcode {
+                margin-top: 30px;
+              }
+              
+              .barcode-img {
+                max-width: 200px;
+                height: auto;
+              }
+              
               @media print {
                 body {
                   -webkit-print-color-adjust: exact;
                   print-color-adjust: exact;
+                }
+                
+                .receipt {
+                  padding: 0;
+                }
+                
+                .receipt-section {
+                  break-inside: avoid;
                 }
               }
             </style>
