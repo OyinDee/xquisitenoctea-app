@@ -36,8 +36,9 @@ const productCategories = [
 
 interface ProductFormProps {
   params: {
-    id?: string
+    id: string
   }
+  searchParams: { [key: string]: string | string[] | undefined }
 }
 
 export default function ProductFormPage({ params }: ProductFormProps) {
