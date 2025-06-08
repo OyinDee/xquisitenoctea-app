@@ -5,13 +5,13 @@ import { ObjectId } from "mongodb"
 // DELETE admin
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { db } = await connectToDatabase()
     if (!db) throw new Error("Database connection failed")
 
-    const { id } = params
+    const { id } = await params
 
     // Validate ObjectId
     if (!ObjectId.isValid(id)) {
