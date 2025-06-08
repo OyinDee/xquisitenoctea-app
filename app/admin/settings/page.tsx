@@ -22,7 +22,8 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import ImageUpload from "@/components/ui/image-upload"
-import { AlertCircle, Check, Save, Send, Store, Trash2 } from "lucide-react"
+import MultiImageUpload from "@/components/ui/multi-image-upload"
+import { AlertCircle, Check, Save, Send, Store, Trash2, Eye } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
@@ -177,10 +178,11 @@ export default function SettingsPage() {
                 
                 <div className="space-y-2">
                   <Label>Store Logo</Label>
-                  <ImageUpload
+                  <MultiImageUpload
                     value={storeLogo ? [storeLogo] : []}
                     onChange={(url) => setStoreLogo(url)}
                     onRemove={() => setStoreLogo("")}
+                    multiple={false}
                   />
                 </div>
               </div>

@@ -265,4 +265,4 @@ export default function AdminsPage() {
       </Card>
     </div>
   )
-} 
+}

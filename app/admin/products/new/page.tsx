@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import ImageUpload from "@/components/ui/image-upload"
+import MultiImageUpload from "@/components/ui/multi-image-upload"
 import { ArrowLeft, Save } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
@@ -212,7 +213,7 @@ export default function NewProductPage() {
                 <CardTitle>Product Images</CardTitle>
               </CardHeader>
               <CardContent>
-                <ImageUpload
+                <MultiImageUpload
                   value={product.images}
                   onChange={handleImageChange}
                   onRemove={handleImageRemove}
