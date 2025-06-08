@@ -1,6 +1,6 @@
 "use client"
 
-import AdminNav from "@/components/admin/nav"
+import AdminNav from "../../components/admin/nav"
 
 export default function AdminLayout({
   children,
@@ -17,4 +17,4 @@ export default function AdminLayout({
       </div>
     </div>
   )
-} 
+}
