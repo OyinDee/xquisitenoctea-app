@@ -33,7 +33,13 @@ export default function ProductDetailPage() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`/api/products/${params.id}`)
+        if (!params || !params.id) {
+          console.error("Invalid params:", params)
+          setIsLoading(false)
+          return
+        }
+
+        const response = await fetch(`/api/products/${params?.id}`)
         if (response.ok) {
           const data = await response.json()
           setProduct(data)
@@ -49,7 +55,7 @@ export default function ProductDetailPage() {
     }
 
     fetchProduct()
-  }, [params.id])
+  }, [params?.id])
 
   const addToCart = () => {
     if (!product) return
