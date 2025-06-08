@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
   images: {
     domains: ['res.cloudinary.com'],
     remotePatterns: [
@@ -27,7 +26,5 @@ const nextConfig = {
   // Ensure all routes are handled properly by Next.js
   trailingSlash: false,
 }
-
-module.exports = nextConfig
 
 module.exports = nextConfig
