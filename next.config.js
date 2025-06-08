@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const path = require('path');
+
 const nextConfig = {
   images: {
     domains: ['res.cloudinary.com'],
@@ -25,6 +27,13 @@ const nextConfig = {
   },
   // Ensure all routes are handled properly by Next.js
   trailingSlash: false,
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      '@': path.resolve(__dirname, './'),
+    };
+    return config;
+  },
 }
 
 module.exports = nextConfig
