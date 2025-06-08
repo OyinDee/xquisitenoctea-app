@@ -64,15 +64,15 @@
     "tailwind-merge": "^2.2.1",
     "tailwindcss": "^3.4.17",
     "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5.8.3",
+    "@types/react": "^18.3.23",
+    "@types/react-dom": "^18",
+    "@types/node": "^20.19.0",
+    "@types/bcryptjs": "^2.4.6",
     "vaul": "^1.1.2"
   },
   "devDependencies": {
-    "@types/bcryptjs": "^2.4.6",
-    "@types/node": "^20.19.0",
-    "@types/react": "^18.3.23",
-    "@types/react-dom": "^18",
     "eslint": "^8",
-    "eslint-config-next": "14.1.0",
-    "typescript": "^5.8.3"
+    "eslint-config-next": "14.1.0"
   }
 }
